@@ -8,15 +8,15 @@ const { Schema } = mongoose;
         required:true
     },
     video:{
-        type:Object,
+        type:String,
         required:true
     },
     resolution:{
-        type:Object,
+        type:String,
         required:true
     },
     device:{
-        type:Object,
+        type:Array,
         required:true
     },
     price:{
@@ -29,6 +29,6 @@ const { Schema } = mongoose;
        default:Date.now
    }
   });
-  const User=mongoose.model('plan',Plan);
+  const Plans=mongoose.model('plan',Plan);
   
-  module.exports=User;
+  export default Plans;

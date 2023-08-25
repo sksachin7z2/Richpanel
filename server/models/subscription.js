@@ -11,7 +11,7 @@ const { Schema } = mongoose;
         type:String,
         required:true
     },
-    durationtype:{
+    durationType:{
         type:String,
         required:true
     },
@@ -20,6 +20,6 @@ const { Schema } = mongoose;
        default:Date.now
    }
   },{timestamps:true});
-  const User=mongoose.model('subscription',Subscription);
+  const Subscriptions=mongoose.model('subscription',Subscription);
   
-  module.exports=User;
+  export default Subscriptions;

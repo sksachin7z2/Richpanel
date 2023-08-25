@@ -1,6 +1,6 @@
 
 import  jwt  from "jsonwebtoken";
-const JWT_SECRET = "Harryisagoodb$oy";
+const JWT_SECRET="Ri5h7an&$"
  
 const fetchuser = (req, res, next) => {
  
