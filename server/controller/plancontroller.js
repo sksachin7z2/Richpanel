@@ -1,6 +1,6 @@
 import Plans from '../models/plan.js'
 
-const initiateplans=async()=>{
+export const initiateplans=async()=>{
     try {
 
 
@@ -68,5 +68,13 @@ const initiateplans=async()=>{
         console.log(error)
     }
 }
+export const getPlans=async(req,res)=>{
+    try {
+        const getdata=await Plans.find();
+        res.json(getdata);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server error");
+    }
+}
 
-export default initiateplans;

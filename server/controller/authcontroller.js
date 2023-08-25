@@ -56,7 +56,7 @@ export const login=async(req,res)=>{
       }
     }
     const authToken = jwt.sign(data, JWT_SECRET);
-    success=true;
+    
     res.json({authToken:authToken})
     
    } catch (error) {
