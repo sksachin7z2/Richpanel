@@ -14,16 +14,18 @@ export const initiateplans=async()=>{
                         monthly:100,
                         yearly:1000
                     },
+                    screen:1
                 },
                 {
                     plan: "Basic",
                     video:"Good",
-                    resolution:"480p",
+                    resolution:"720p",
                     device:["Phone","Tablet","Computer","TV"],
                     price:{
                         monthly:200,
                         yearly:2000
                     },
+                    screen:3
                 },
                 {
                     plan: "Standard",
@@ -34,6 +36,7 @@ export const initiateplans=async()=>{
                         monthly:500,
                         yearly:5000
                     },
+                    screen:5
                 },
                 {
                     plan: "Premium",
@@ -44,6 +47,7 @@ export const initiateplans=async()=>{
                         monthly:700,
                         yearly:7000
                     },
+                    screen:10
                 },
         ]
         

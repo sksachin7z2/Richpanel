@@ -23,7 +23,10 @@ const { Schema } = mongoose;
         type:Object,
         required:true
     },
-
+    screen:{
+        type:Number,
+        required:true
+    },
    date:{
        type:Date,
        default:Date.now

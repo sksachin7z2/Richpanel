@@ -24,7 +24,7 @@ function PlanStatus({host}) {
 const getdevice=getdevic.data
 console.log(getdevice)
       let device=getdevice.filter(e=>e.plan===data.plan)[0];
-      setPrice(device.price['yearly'])
+      setPrice(parseInt(data.paymentIntent.amount)/100)
       // console.log(device)
           setDevice(device.device)
           
@@ -68,6 +68,11 @@ try {
   console.log(error)
 }
   }
+  function addMonths(date, months) {
+    date.setMonth(date.getMonth() + months);
+  
+    return date;
+  }
  
   return (
     <div className='h-[100vh] w-[100vw] flex justify-center items-center bg-[#2a4b8b] '>
@@ -109,16 +114,21 @@ try {
                                     </div>
                                
                                 <div  className='font-bold text-center  text-[30px]'>
-                                {price}<span className='font-normal'>/yr</span> 
+                                {price}<span className='font-normal'>{subscription.durationType==='monthly'?"/mo":"/yr"}</span> 
                                 </div>
                                 </div>
 
                                 <div className='mb-4'>
                                   <button onClick={changeplan} className='border-2 text-[#2a4c8c] font-semibold border-[#2a4c8c] py-2 px-6 rounded-md'>{subscription.isActive?"Change Plan":"Choose Plan"}</button>
                                 </div>
-                                <div className='bg-[#f6f6f7] py-1 px-2 rounded'>
+                             {subscription.durationType==="yearly" ?  <div className='bg-[#f6f6f7] py-1 px-2 rounded'>
                            <span className='font-normal'> Your subscription has started from </span> <span className='font-semibold'> {month[new Date(subscription.date).getMonth()]+" "+new Date(subscription.date).getDate()+", "+ new Date(subscription.date).getFullYear()}</span> <span className='font-normal'> and will auto renew on </span><span className='font-semibold'> {month[new Date(subscription.date).getMonth()]+" "+new Date(subscription.date).getDate()+", "+ parseInt(new Date(subscription.date).getFullYear()+1)}</span>
                                 </div>
+                              :
+                              <div className='bg-[#f6f6f7] py-1 px-2 rounded'>
+                              <span className='font-normal'> Your subscription has started from </span> <span className='font-semibold'> {month[new Date(subscription.date).getMonth()]+" "+new Date(subscription.date).getDate()+", "+ new Date(subscription.date).getFullYear()}</span> <span className='font-normal'> and will auto renew on </span><span className='font-semibold'> {month[new Date( addMonths( new Date(subscription.date),1)).getMonth()]+" "+new Date(addMonths( new Date(subscription.date),1)).getDate()+", "+ parseInt(new Date(addMonths( new Date(subscription.date),1)).getFullYear())}</span>
+                                   </div>
+                              }
         </div>
         <div>
 

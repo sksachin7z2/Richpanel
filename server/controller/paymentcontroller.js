@@ -31,7 +31,7 @@ export const payment=async(req,res)=>{
         
     } catch (error) {
         console.log(error);
-        res.status(400).json({error:{message:e.message}});
+        res.status(400).json({error:{message:error.message}});
     }
    
 }

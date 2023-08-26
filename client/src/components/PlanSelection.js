@@ -48,11 +48,11 @@ const getPlans=async()=>{
 }
 
 const handlesubmit=()=>{
-    Cookies.set('durationType','Monthly')
+    Cookies.set('durationType',durationType)
     Cookies.set('plan',planStatus)
     let plan=Plans.filter(e=>e.plan===planStatus)
     console.log(plan)
-    Cookies.set('price',plan[0].price['monthly'])
+    Cookies.set('price',plan[0].price[durationType])
     if(!change){
     navigate('/payment');
     }

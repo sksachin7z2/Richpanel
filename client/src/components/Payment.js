@@ -172,7 +172,7 @@ const handlesubmit=async()=>{
                                     </div>
                                
                                 <div  className='font-semibold text-center  text-sm'>
-                                {Cookies.get('price')}/mo
+                                {Cookies.get('price')}{Cookies.get('durationType')==='monthly'?"/mo":'/yr'}
                                 </div>
                                 </div>
                               
