@@ -15,6 +15,10 @@ const { Schema } = mongoose;
         type:String,
         required:true
     },
+    paymentIntent:{
+        type:Object,
+        default:{status:"Incomplete transaction"}
+    },
    date:{
        type:Date,
        default:Date.now

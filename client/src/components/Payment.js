@@ -1,10 +1,58 @@
 import Cookies from 'js-cookie'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
+import {CardElement, useElements} from '@stripe/react-stripe-js'
+import { useStripe } from '@stripe/react-stripe-js'
+import axios from 'axios'
 
-function Payment() {
+function Payment({host}) {
+  const elements=useElements();
+  const stripe=useStripe();
+  const [userinfo, setUserinfo] = useState({})
   const cap=(a)=>{
     let f=a[0].toUpperCase();
     return f+a.slice(1)
+}
+const getdata=async()=>{
+  try {
+    const user=await axios.post(`${host}/api/auth/getUser`,{},{
+      headers:{
+        "auth-token":Cookies.get('auth-token__rich-p$nal')
+      }
+    })
+    setUserinfo(user.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+// useEffect(() => {
+// // getdata();
+// }, [])
+
+const handlesubmit=async()=>{
+  if(!stripe || !elements)
+  return;
+  try {
+    const createpayment=await axios.post(`${host}/api/payment/create`,{
+      currency:"INR",
+      method:'card',
+      amount:Cookies.get('price')
+    },{
+      headers:{
+        'Content-Type':"application/json"
+      }
+    })
+    const clientSecret=createpayment.data.clientSecret
+    console.log(clientSecret)
+   const {paymentIntent}=await stripe.confirmCardPayment(clientSecret,{
+      payment_method:{
+        card:elements.getElement(CardElement)
+      }
+    })
+    // console.log(paymentIntent)
+    
+  } catch (error) {
+    console.log(error)
+  }
 }
   return (
     <div className='bg-[#2b4b8b] h-[100vh] w-[100vw] flex justify-center items-center'>
@@ -14,11 +62,11 @@ function Payment() {
                   <div className='font-semibold text-[1.5rem] '>Complete Payment</div>
                   <div className='text-sm text-gray-500'>Enter your credit or debit card details below</div>
 
-                  <div>
-
+                  <div className='my-5 border-2 rounded py-2 px-2 border-gray-500 '>
+                    <CardElement/>
                   </div>
                   <div className='mt-3 '>
-                    <button className='bg-[#2b4c8c]  text-white py-2 px-5'>Confirm Payment</button>
+                    <button onClick={handlesubmit} className='bg-[#2b4c8c]  text-white py-2 px-5'>Confirm Payment</button>
                   </div>
             </div>
             <div className='bg-[#f5f5f6] rounded-md p-9'>
