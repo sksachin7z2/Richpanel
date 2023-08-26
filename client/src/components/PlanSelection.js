@@ -52,7 +52,7 @@ const handlesubmit=()=>{
     Cookies.set('plan',planStatus)
     let plan=Plans.filter(e=>e.plan===planStatus)
     console.log(plan)
-    Cookies.set('price',plan[0].price[durationType])
+    Cookies.set('price',plan[0].price['monthly'])
     if(!change){
     navigate('/payment');
     }
