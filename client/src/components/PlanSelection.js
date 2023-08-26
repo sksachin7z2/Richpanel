@@ -25,7 +25,7 @@ setDurationType('monthly')
 }
 
 const cmp=(a,b)=>{
-    const obj={"Premium":2,"Standard":1,"Basic":0,"Mobile":-1}
+    const obj={"Regular":2,"Premium":1,"Standard":0,"Basic":-1}
     if(obj[a.plan]<obj[b.plan])
     return -1;
     else   if(obj[a.plan]>obj[b.plan])

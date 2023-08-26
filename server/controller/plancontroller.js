@@ -6,7 +6,7 @@ export const initiateplans=async()=>{
 
         const plans=[
                 {
-                    plan: "Mobile",
+                    plan: "Basic",
                     video:"Good",
                     resolution:"480p",
                     device:["Phone","Tablet"],
@@ -17,10 +17,10 @@ export const initiateplans=async()=>{
                     screen:1
                 },
                 {
-                    plan: "Basic",
+                    plan: "Standard",
                     video:"Good",
                     resolution:"720p",
-                    device:["Phone","Tablet","Computer","TV"],
+                    device:["Phone","Tablet"],
                     price:{
                         monthly:200,
                         yearly:2000
@@ -28,10 +28,10 @@ export const initiateplans=async()=>{
                     screen:3
                 },
                 {
-                    plan: "Standard",
+                    plan: "Premium",
                     video:"Better",
                     resolution:"1080p",
-                    device:["Phone","Tablet","Computer","TV"],
+                    device:["Phone","Tablet","Computer"],
                     price:{
                         monthly:500,
                         yearly:5000
@@ -39,10 +39,10 @@ export const initiateplans=async()=>{
                     screen:5
                 },
                 {
-                    plan: "Premium",
+                    plan: "Regular",
                     video:"Best",
                     resolution:"4K+HDR",
-                    device:["Phone","Tablet","Computer","TV"],
+                    device:["Phone","Tablet","TV"],
                     price:{
                         monthly:700,
                         yearly:7000
