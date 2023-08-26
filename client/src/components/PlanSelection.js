@@ -48,7 +48,7 @@ const getPlans=async()=>{
 }
 
 const handlesubmit=()=>{
-    Cookies.set('durationType',durationType)
+    Cookies.set('durationType','Monthly')
     Cookies.set('plan',planStatus)
     let plan=Plans.filter(e=>e.plan===planStatus)
     console.log(plan)
