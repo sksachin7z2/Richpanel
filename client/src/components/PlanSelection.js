@@ -25,14 +25,14 @@ setDurationType('monthly')
 }
 
 const cmp=(a,b)=>{
-    if(a.plan==="Mobile")
+    const obj={"Premium":2,"Standard":1,"Basic":0,"Mobile":-1}
+    if(obj[a.plan]<obj[b.plan])
     return -1;
-    else   if(a.plan==='Basic')
-    return 0;
-    else if(a.plan==='Standard')
+    else   if(obj[a.plan]>obj[b.plan])
     return 1;
     else
-    return 2;
+    return 0;
+   
 }
 
 const getPlans=async()=>{
