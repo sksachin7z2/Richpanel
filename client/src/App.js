@@ -12,7 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const [progress, setProgress] = useState(0)
-  const host="http://localhost:5000"
+  const host="https://subscription-7z2.onrender.com"
   const notify=(message)=>toast(message);
   return (
   <Router>
