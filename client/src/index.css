@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+    --switches-bg-color: #2b4c8c;
+    --switches-label-color: white ;
+    --switch-bg-color: white;
+    --switch-text-color: #2b4c8c ;
+}
+.maintransform{
+    transform: translate(81.9px) !important;
+}
+.bottom-arrow{
+    top:69px;
+    transform: rotate(45deg);
+}
+
+
