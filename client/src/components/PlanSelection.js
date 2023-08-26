@@ -11,7 +11,7 @@ function PlanSelection({host,setProgress}) {
 const [Plans, setPlans] = useState([]);
 const [durationType, setDurationType] = useState("monthly")
 const [checked, setChecked] = useState(false)
-const [planStatus, setPlanStatus] = useState("Mobile")
+const [planStatus, setPlanStatus] = useState("Basic")
 const handleChange=(checked)=>{
     setChecked(checked)
     if(checked){
