@@ -2,36 +2,56 @@ import Cookies from 'js-cookie'
 import React,{useState,useEffect} from 'react'
 import {CardElement, useElements} from '@stripe/react-stripe-js'
 import { useStripe } from '@stripe/react-stripe-js'
+import { useNavigate,useLocation } from 'react-router-dom'
 import axios from 'axios'
+import queryString from 'query-string'
 
-function Payment({host}) {
+function Payment({host,setProgress,notify}) {
   const elements=useElements();
+  let location=useLocation()
+  let {change}=queryString.parse(location.search)
+  let navigate=useNavigate()
   const stripe=useStripe();
+  const [subscription, setsubscription] = useState({})
   const [userinfo, setUserinfo] = useState({})
   const cap=(a)=>{
     let f=a[0].toUpperCase();
     return f+a.slice(1)
 }
-const getdata=async()=>{
+const getsubscription=async()=>{
   try {
-    const user=await axios.post(`${host}/api/auth/getUser`,{},{
+    const subs=await axios.post(`${host}/api/subscribe/getSubscription`,{},{
       headers:{
-        "auth-token":Cookies.get('auth-token__rich-p$nal')
+        'auth-token':Cookies.get('auth-token__rich-p$nal')
       }
     })
-    setUserinfo(user.data)
+    const data=subs.data;
+    console.log(data)
+    if(data && !change){
+    navigate('/planStatus');
+    return;
+    }
+      setsubscription(data)
   } catch (error) {
+    
     console.log(error)
+   
   }
 }
-// useEffect(() => {
-// // getdata();
-// }, [])
+useEffect(() => {
+  if(!Cookies.get('auth-token__rich-p$nal')){
+  navigate('/login')
+  return;
+  }
+ 
+  getsubscription()
+}, [])
 
 const handlesubmit=async()=>{
   if(!stripe || !elements)
   return;
   try {
+    setProgress(10)
     const createpayment=await axios.post(`${host}/api/payment/create`,{
       currency:"INR",
       method:'card',
@@ -41,6 +61,7 @@ const handlesubmit=async()=>{
         'Content-Type':"application/json"
       }
     })
+    setProgress(50)
     const clientSecret=createpayment.data.clientSecret
     console.log(clientSecret)
    const {paymentIntent}=await stripe.confirmCardPayment(clientSecret,{
@@ -48,10 +69,58 @@ const handlesubmit=async()=>{
         card:elements.getElement(CardElement)
       }
     })
+    setProgress(70)
+    console.log(paymentIntent)
+      if(!paymentIntent)
+      {
+        setProgress(100)
+       notify('Network Error')
+        return;
+      }
+    if(paymentIntent.status==="succeeded")
+    {
     // console.log(paymentIntent)
-    
+    if(!change){
+      console.log("gghhg")
+    const subs=await axios.post(`${host}/api/subscribe/createSubscription`,{
+      plan:Cookies.get('plan'),
+      durationType:Cookies.get('durationType'),
+      paymentIntent:paymentIntent,
+      isActive:true
+    },{
+      headers:{
+        "auth-token":Cookies.get('auth-token__rich-p$nal')
+      }
+    })
+    const data=subs.data;
+    console.log(data);
+    navigate('/planStatus');
+  }
+  else{
+    const subs=await axios.put(`${host}/api/subscribe/updateSubscription/${subscription._id}`,{
+      plan:Cookies.get('plan'),
+      durationType:Cookies.get('durationType'),
+      paymentIntent:paymentIntent,
+      isActive:true
+    },{
+      headers:{
+        "auth-token":Cookies.get('auth-token__rich-p$nal')
+      }
+    })
+    const data=subs.data;
+    console.log(data);
+    navigate('/planStatus');
+  }
+  setProgress(100)
+  }
+  else{
+    setProgress(100)
+    notify('Payment Unsuccessfull !! Try Again')
+  }
   } catch (error) {
+    setProgress(100)
     console.log(error)
+    notify(error.message)
   }
 }
   return (
@@ -103,7 +172,7 @@ const handlesubmit=async()=>{
                                     </div>
                                
                                 <div  className='font-semibold text-center  text-sm'>
-                                {Cookies.get('price')}
+                                {Cookies.get('price')}/mo
                                 </div>
                                 </div>
                               

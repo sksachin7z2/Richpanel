@@ -12,6 +12,7 @@ import App from './App';
 
   const stripePromise=loadStripe(process.env.REACT_APP_KEY)
   // 👇️ if you use TypeScript, add non-null 
+  console.log(process.env.REACT_APP_KEY)
   
   root.render(
     <StrictMode>

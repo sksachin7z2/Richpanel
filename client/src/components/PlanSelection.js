@@ -2,9 +2,12 @@ import React,{useState,useEffect} from 'react'
 import axios from 'axios'
 import Switch from 'react-switch'
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-function PlanSelection({host}) {
+import { useNavigate ,useLocation} from 'react-router-dom';
+import queryString from 'query-string'
+function PlanSelection({host,setProgress}) {
     let navigate=useNavigate();
+    let location=useLocation();
+    let {change}=queryString.parse(location.search);
 const [Plans, setPlans] = useState([]);
 const [durationType, setDurationType] = useState("monthly")
 const [checked, setChecked] = useState(false)
@@ -43,48 +46,76 @@ const getPlans=async()=>{
         console.log(error)
     }
 }
-const cap=(a)=>{
-    let f=a[0].toUpperCase();
-    return f+a.slice(1)
-}
+
 const handlesubmit=()=>{
     Cookies.set('durationType',durationType)
     Cookies.set('plan',planStatus)
     let plan=Plans.filter(e=>e.plan===planStatus)
     console.log(plan)
     Cookies.set('price',plan[0].price[durationType])
+    if(!change){
     navigate('/payment');
+    }
+else
+navigate(`/payment?change=${true}`)
+}
+const getsubscription=async()=>{
+    try {
+      const subs=await axios.post(`${host}/api/subscribe/getSubscription`,{},{
+        headers:{
+          'auth-token':Cookies.get('auth-token__rich-p$nal')
+        }
+      })
+      const data=subs.data;
+      console.log(data)
+        if(data && !change){
+        navigate('/planStatus')
+        return;
+        }
+    } catch (error) {
+      
+      console.log(error)
+    }
 }
 useEffect(() => {
+    if(!Cookies.get('auth-token__rich-p$nal')){
+    navigate('/login')
+    return;
+    }
+  
+    getsubscription()
+
   getPlans();
 
 }, [])
   return (
-    <div className='container h-[100vh] w-[100vw] flex justify-center items-center'>
+    <div className='container h-[100vh] w-[70rem] m-auto flex justify-center items-center'>
         <div className='m-3 p-6'>
             <div className='font-bold text-xl text-center mb-5'>
                 Choose the right plan for you
             </div>
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left text-gray-500 ">
-        <thead class="font-semibold text-gray-700 ">
+<div class="relative  overflow-x-auto">
+    <div class=" w-full text-sm text-left text-gray-500 ">
+        <div class="font-semibold mb-6 grid  grid-cols-5   gap-10 text-gray-700 ">
          
-            <tr>
-            <th className='pr-[5rem]'>
+           
+            <div>
+                <div className='relative top-7   '>
+
             <Switch
     checked={checked}
     onChange={handleChange}
-    handleDiameter={28}
+    handleDiameter={32}
     offColor="#2b4c8c"
     onColor="white"
     offHandleColor="white"
     onHandleColor="#2b4c8c"
-    height={45}
+    height={55}
     width={160}
     borderRadius={30}
     activeBoxShadow="0px 0px 1px 2px "
     uncheckedIcon={
-      <div 
+      <div className='text-sm'
         style={{
           display: "flex",
           
@@ -102,10 +133,10 @@ useEffect(() => {
       </div>
     }
     checkedIcon={
-        <div 
+        <div className='text-sm'
         style={{
             display: "flex",
-          paddingLeft:"15px",
+          paddingLeft:"6px",
             justifyContent: "center",
             alignItems: "center",
             height: "100%",
@@ -120,7 +151,7 @@ useEffect(() => {
       </div>
     }
     uncheckedHandleIcon={
-      <div 
+      <div className='text-sm'
         style={{
           display: "flex",
           justifyContent: "center",
@@ -129,7 +160,8 @@ useEffect(() => {
        backgroundColor:"white",
        padding:"0 2rem",
        borderRadius:"15px",
-color:"#2b4c8c"
+color:"#2b4c8c",
+fontSize:13
          
         }}
       >
@@ -137,7 +169,7 @@ color:"#2b4c8c"
       </div>
     }
     checkedHandleIcon={
-      <div 
+      <div className='text-sm'
         style={{
          
             width:"70px",
@@ -151,7 +183,8 @@ color:"#2b4c8c"
           padding:"0 2rem 0 2rem",
           borderRadius:"15px",
         color:"#2b4c8c",
-            
+        
+        fontSize:13
          
         }}
       >
@@ -161,31 +194,32 @@ color:"#2b4c8c"
     className="react-switch"
     id="small-radius-switch"
   />
-            </th>
+                </div>
+            </div>
                 {
                     Plans.map((e)=>{
                         return(
-                            <th scope="col" class="px-6 py-3 cursor-pointer" onClick={()=>setPlanStatus(e.plan)}>
+                            <div className={` cursor-pointer py-[3rem] ${e.plan===planStatus?"bg-[#2b4c8c]": 'bg-[#7e93b9]'}  text-white`} onClick={()=>setPlanStatus(e.plan)}>
                                 <div className='relative'>
-                                <div className={`py-[2rem] w-[6rem] m-auto ${e.plan===planStatus?"bg-[#2b4c8c]": 'bg-[#7e93b9]'}  text-white`}>
+                                <div >
                                     <div className='text-center'>
                                     {e.plan}
                                     </div>
                                 
                                 </div>
-                                    {e.plan===planStatus&&<div class="bottom-arrow absolute w-[20px] left-[41%] h-[20px] bg-[#2b4c8c]"></div>}
+                                    {e.plan===planStatus&&<div class="bottom-arrow absolute w-[20px] left-[45%] h-[20px] bg-[#2b4c8c]"></div>}
                                 </div>
                                
                            
-                        </th>
+                        </div>
                         )
                     })
                 }
                
-            </tr>
-        </thead>
-        <tbody>
-        <tr className='bg-white border-b '>
+            
+        </div>
+        <div >
+        <div className='grid grid-cols-5 gap-10 bg-white border-b'>
             <th >
                 Monthly price
             </th>
@@ -210,8 +244,8 @@ color:"#2b4c8c"
                     })
                 }
                
-            </tr>
-            <tr className='bg-white border-b'>
+            </div>
+            <div className='grid grid-cols-5 gap-10 bg-white border-b' >
             <th>
                 Video quality
                 </th>
@@ -228,8 +262,8 @@ color:"#2b4c8c"
                     })
                 }
                
-            </tr>
-            <tr className='bg-white border-b'>
+            </div>
+            <div className='grid grid-cols-5 gap-10 bg-white border-b'>
             <th>
                 Resolution
                 </th>
@@ -246,10 +280,10 @@ color:"#2b4c8c"
                     })
                 }
                
-            </tr>
-            <tr className='bg-white '>
+            </div>
+            <div className='grid grid-cols-5 gap-10  bg-white '>
             <th>
-                <div className='h-[150px]'>
+                <div >
 
                 Devices you can use to watch
                 </div>
@@ -257,7 +291,7 @@ color:"#2b4c8c"
                 {
                     Plans.map((e)=>{
                         return(
-                            <th scope="col" class="px-6 py-[2rem] ">
+                            <th scope="col" class=" py-[2rem] ">
                                 <div className={`flex flex-col gap-6 ${e.plan==='Mobile'?"h-[138px]":""}`}>             
                             {
                                 e.device.map((f)=>{
@@ -274,9 +308,9 @@ color:"#2b4c8c"
                     })
                 }
                
-            </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
 <div className='text-center'>
     <button onClick={handlesubmit} className='text-white bg-[#2b4c8c] py-[2vh] px-[11vw] text-center'>Next</button>

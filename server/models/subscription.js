@@ -19,6 +19,10 @@ const { Schema } = mongoose;
         type:Object,
         default:{status:"Incomplete transaction"}
     },
+    isActive:{
+        type:Boolean,
+        default:false
+    },
    date:{
        type:Date,
        default:Date.now
