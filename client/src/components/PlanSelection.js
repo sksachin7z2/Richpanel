@@ -265,6 +265,24 @@ fontSize:13
             </div>
             <div className='grid grid-cols-5 gap-10 bg-white border-b'>
             <th>
+                Number of active screens at one time
+                </th>
+                {
+                    Plans.map((e)=>{
+                        return(
+                            <th scope="col" class={`px-6 py-3 ${e.plan===planStatus?"text-[#2b4c8c]": 'text-gray-400'} `}>
+                                <div className='text-center'>
+                                {e.screen}
+                                </div>
+                            
+                        </th>
+                        )
+                    })
+                }
+               
+            </div>
+            <div className='grid grid-cols-5 gap-10 bg-white border-b'>
+            <th>
                 Resolution
                 </th>
                 {
