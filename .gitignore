@@ -1,2 +1,5 @@
 node_modules
 .env
+Spacefile
+Discovery.md
+.space
